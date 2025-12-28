@@ -56,6 +56,8 @@ class App(CTk):
         self.title("logik")
         self.iconbitmap("icon.ico")
         self.resizable(False,False)
+        self.HOST = "0"
+        self.PORT= 8080
 
 
 
@@ -63,6 +65,31 @@ class App(CTk):
         self.lbl.place(x=0,y=0)
         lbl2 = MyLbl(self,text="logiks",size=20)
         lbl2.place(x = 450,y=50)
+
+
+
+        self.frame_start = CTkFrame(self,width=600,height=400,fg_color="#7a50b2")
+        self.frame_start.place(x=0,y=0)
+
+
+        self.box_port = CTkEntry(self.frame_start, width = 250,height=50,fg_color="#34dd97",
+                                 corner_radius=25,placeholder_text="port")
+        self.box_port.place(x = 100,y = 150)
+
+        self.box_host = CTkEntry(self.frame_start, width = 250,height=50,fg_color="#34dd97",
+                                 corner_radius=25,placeholder_text="host")
+        self.box_host.place(x = 100,y = 220)
+
+
+        self.btn_begin = MyBtn(self.frame_start,text ="begin", command = self.begin)
+        self.btn_begin.place(x = 100, y = 300)
+
+    def begin(self):
+        self.PORT = int(self.box_port.get())
+        self.HOST = int(self.box_host.get())
+        self.frame_start.destroy()
+
+
 
         self.btn_name = MyBtn(self,text = "Entr", image=USER,command = self.open_name)
         self.btn_name.place(x = 405,y = 150)
@@ -79,6 +106,9 @@ class App(CTk):
         self.frame_name = CTkFrame(self,width = 350,
                                     height= 400,fg_color="#d68e8e")
         self.frame_name.place(x =-350, y = 0)
+
+
+
 
         lbl3 = MyLbl(self.frame_name, text = "enter name", size = 20,)
         lbl3.place (x = 50,y = 100)
@@ -186,7 +216,7 @@ class App(CTk):
         try:
 
             self.socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-            self.socket.connect(("0.tcp.eu.ngrok.io",18893))
+            self.socket.connect((f"{self.HOST}.tcp.eu.ngrok.io",self.PORT))
             self.socket.send(f"{self.USER}|{self.ICON}".encode())
             Mess(self.all_mess,self.USER,self.ICON,"welcom chat!","w")
             input = threading.Thread(target=self.input_mess, daemon=True)
